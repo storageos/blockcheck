@@ -34,14 +34,14 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 	tests := []struct {
 		name string
 		size int
-		init func(t *testing.T, path string, i int)
+		init func(t *testing.T, path string)
 
 		wantEmpty bool
 	}{
 		{
 			name: "ext4",
 			size: 256 * kilobyte,
-			init: func(t *testing.T, path string, i int) {
+			init: func(t *testing.T, path string) {
 				runCmd(t, "mkfs.ext4", "-F", path)
 			},
 			wantEmpty: false,
@@ -49,7 +49,7 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 		{
 			name: "ext3",
 			size: 256 * kilobyte,
-			init: func(t *testing.T, path string, i int) {
+			init: func(t *testing.T, path string) {
 				runCmd(t, "mkfs.ext3", "-F", path)
 			},
 			wantEmpty: false,
@@ -57,7 +57,7 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 		{
 			name: "xfs",
 			size: 100 * 1024 * kilobyte,
-			init: func(t *testing.T, path string, i int) {
+			init: func(t *testing.T, path string) {
 				runCmd(t, "mkfs.xfs", path)
 			},
 			wantEmpty: false,
@@ -65,7 +65,7 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 		{
 			name: "btrfs",
 			size: 1024 * 1024 * kilobyte,
-			init: func(t *testing.T, path string, i int) {
+			init: func(t *testing.T, path string) {
 				runCmd(t, "mkfs.btrfs", path)
 			},
 			wantEmpty: false,
@@ -73,7 +73,7 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 		{
 			name:      "no fs",
 			size:      256 * kilobyte,
-			init:      func(t *testing.T, path string, i int) {},
+			init:      func(t *testing.T, path string) {},
 			wantEmpty: true,
 		},
 	}
@@ -101,7 +101,7 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 
 			// Close the file and run init, which populates the file
 			f.Close()
-			tt.init(t, path, i+100)
+			tt.init(t, path)
 
 			// Mount the block device
 			dev := fmt.Sprintf("/dev/loop%d", 100+i)
