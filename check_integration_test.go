@@ -63,6 +63,14 @@ func TestIsBlockDeviceEmpty(t *testing.T) {
 			wantEmpty: false,
 		},
 		{
+			name: "btrfs",
+			size: 1024 * 1024 * kilobyte,
+			init: func(t *testing.T, path string, i int) {
+				runCmd(t, "mkfs.btrfs", path)
+			},
+			wantEmpty: false,
+		},
+		{
 			name:      "no fs",
 			size:      256 * kilobyte,
 			init:      func(t *testing.T, path string, i int) {},
